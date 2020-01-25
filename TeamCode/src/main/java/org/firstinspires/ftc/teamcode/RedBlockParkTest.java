@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Autonomous
-public class RedBlockPark extends AutoCommon {
+@Disabled
+public class RedBlockParkTest extends AutoCommon {
 
     @Override
     public void runOpMode() {
@@ -13,9 +15,15 @@ public class RedBlockPark extends AutoCommon {
         turnToHeading(90, 0.3);
 
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_STRAIGHT_POS);
-        moveArmDown(robot.ARM_AUTO_TO_TELEOP_ENC_TICKS - 400);
+        moveArmDown(4900);
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
+
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS);
+        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_STRAIGHT_POS);
+        robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
+
+        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS);
+
 
         driveOnHeading(-22, 0.3, 90);
         strafeOnHeading(-2, 0.3, 90);
