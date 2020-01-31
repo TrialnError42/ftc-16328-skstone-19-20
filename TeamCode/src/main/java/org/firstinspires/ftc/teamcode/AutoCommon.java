@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Bitmap;
+import android.os.Environment;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,6 +19,15 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AutoCommon extends LinearOpMode {
 
@@ -31,6 +43,10 @@ public class AutoCommon extends LinearOpMode {
 
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_INIT_POS);
         robot.servoClaw.setPosition(robot.CLAW_INIT_POS);
+
+        telemetry.addData("Status", "Waiting for Vuforia...");
+        telemetry.update();
+        initVuforia();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -135,6 +151,117 @@ public class AutoCommon extends LinearOpMode {
             telemetry.update();
         }
         robot.motorArm.setPower(0);
+    }
+
+    private static final String VUFORIA_KEY = "AWAydHD/////AAABmXGZ9mQxg09AvxhSoY5XwiUiKg1MPonVQDDS"
+        + "nPNo+YPMZ8VgPFUW0TcIMXrdaUXiSIyJCwCD7AtpPBT3x0GMgxihOuroB4VTSN/eV8W8w9QmYnX2lo0VNuVFs0sQ"
+        + "8Loq4jDIf2fPN0UdBHoQegRmV16sdDkYPE9tClFPxAL7oN8h82ETCyP40SZPORsbGZHRCMF5keXzhL6zoNBzD3MT"
+        + "XNCTgIyoPy83Oz0RvplOH9IYrYzXemfsCv667hDX3fFkcly4W2oNfMtwf2Z1vuX1S89Mkgu0R+KEVt25PAHtLTf+"
+        + "Ri2RMAEtUxW49I8Ic75dNWRno7LC1+NrXDJ5Iis693C/fUcNAC4S5uYRCmNTskz5";
+
+    private VuforiaLocalizerImplSubclass vuforia;
+
+    private void initVuforia() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        vuforia = new VuforiaLocalizerImplSubclass(parameters);
+    }
+
+    private void storeImage(Bitmap image) {
+        File pictureFile = getOutputMediaFile();
+        if (pictureFile == null) {
+            return;
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+            System.out.println("VUFORIA: Image saved to: " + pictureFile);
+        } catch (FileNotFoundException e) {
+            System.out.println("VUFORIA: File not found: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("VUFORIA: Error accessing file: " + e.getMessage());
+        }
+    }
+
+    private File getOutputMediaFile() {
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data"
+                + "/org.firstinspires.ftc.trialnerror"
+                + "/Files");
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdir()) {
+                System.out.println("VUFORIA: unable to save the file to: " + mediaStorageDir.toString());
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("ddMMyyy_HHmm").format(new Date());
+        File mediaFile;
+        String mImageName = "MI_" + timeStamp + ".png";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
+    }
+
+    private boolean waitForBitmap() {
+        vuforia.copyNextToBitmap = true;
+        int cntr = 0;
+        ElapsedTime elapsedTime = new ElapsedTime();
+        elapsedTime.reset();
+        while (vuforia.copyNextToBitmap) {
+            if (elapsedTime.milliseconds() > robot.AUTO_SKYSTONE_BITMAP_WAITING_TIMOUT_MS) {
+                return false;
+            }
+            cntr++;
+        }
+        return true;
+        // Put a timeout making sure that it is not spinning all 30 seconds.  15 seconds max.
+    }
+
+    protected int getSkystoneRegionTotal(int searchPosY) {
+        int value = 0;
+        for (int x = robot.AUTO_SKYSTONE_SEARCH_X; x < robot.AUTO_SKYSTONE_SEARCH_X + robot.AUTO_SKYSTONE_SEARCH_W; x++) {
+            for (int y = searchPosY; y < searchPosY+ robot.AUTO_SKYSTONE_SEARCH_H; y++) {
+                value += ((vuforia.bitmap.getPixel(x, y) >> 16) & 0xFF);
+            }
+        }
+        return value;
+    }
+
+    protected int getSkystonePos() {
+        if (!waitForBitmap()) {
+            System.out.println("VUFORIA: did not get image from vuforia, timed out");
+            return robot.AUTO_SKYSTONE_NO_BITMAP_DEFAULT_POS;
+        }
+
+        int pos1RedTotal = getSkystoneRegionTotal(robot.AUTO_SKYSTONE_SEARCH_POS_1_Y);
+        int pos2RedTotal = getSkystoneRegionTotal(robot.AUTO_SKYSTONE_SEARCH_POS_2_Y);
+        int pos3RedTotal = getSkystoneRegionTotal(robot.AUTO_SKYSTONE_SEARCH_POS_3_Y);
+
+        telemetry.addData("Pos 1", pos1RedTotal);
+        telemetry.addData("Pos 2", pos2RedTotal);
+        telemetry.addData("Pos 3", pos3RedTotal);
+        int pos = (pos1RedTotal < pos2RedTotal && pos1RedTotal < pos3RedTotal) ? 1 : (pos2RedTotal < pos3RedTotal) ? 2 : 3;
+        telemetry.addData("Which?", pos);
+        telemetry.update();
+
+//        System.out.println("DEBUGGING -> Attempting to save file...");
+//        for (int x = 0; x < 2; x++) {
+//            for (int y = 0; y < 2; y++) {
+//                vuforia.bitmap.setPixel(robot.AUTO_SKYSTONE_SEARCH_X + x*robot.AUTO_SKYSTONE_SEARCH_W, robot.AUTO_SKYSTONE_SEARCH_POS_1_Y + x*robot.AUTO_SKYSTONE_SEARCH_H, 0);
+//                vuforia.bitmap.setPixel(robot.AUTO_SKYSTONE_SEARCH_X + x*robot.AUTO_SKYSTONE_SEARCH_W, robot.AUTO_SKYSTONE_SEARCH_POS_2_Y + x*robot.AUTO_SKYSTONE_SEARCH_H, 0);
+//                vuforia.bitmap.setPixel(robot.AUTO_SKYSTONE_SEARCH_X + x*robot.AUTO_SKYSTONE_SEARCH_W, robot.AUTO_SKYSTONE_SEARCH_POS_3_Y + x*robot.AUTO_SKYSTONE_SEARCH_H, 0);
+//            }
+//        }
+//        storeImage(vuforia.bitmap);
+//        System.out.println("DEBUGGING -> File saved");
+
+        return pos;
     }
 
 }

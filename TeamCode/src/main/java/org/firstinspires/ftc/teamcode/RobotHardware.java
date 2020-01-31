@@ -36,6 +36,8 @@ public class RobotHardware {
 
     public static final double CLAW_PIVOT_INIT_POS = 0.13;
     public static final double CLAW_PIVOT_SKYBRIDGE_POS = 0.70;
+    public static final double CLAW_PIVOT_SKYSTONE_APPROACH_POS = 0.69;
+    public static final double CLAW_PIVOT_SKYSTONE_GRAB_POS = 0.65;
     public static final double CLAW_PIVOT_STRAIGHT_POS = 0.56;
     public static final double CLAW_PIVOT_MOTOR_MOD = -6800;
     public static final double CLAW_PIVOT_MAX_POS = 1.0;
@@ -48,6 +50,16 @@ public class RobotHardware {
 
     public static final double WHEEL_DIAMETER = 4.0;
     public static final double DRIVE_MOTOR_TICKS_PER_ROTATION = 537.6;
+
+    public static final double AUTO_SKYSTONE_BITMAP_WAITING_TIMOUT_MS = 5000;
+    public static final int AUTO_SKYSTONE_NO_BITMAP_DEFAULT_POS = 2;
+
+    public static final int AUTO_SKYSTONE_SEARCH_X = 924;
+    public static final int AUTO_SKYSTONE_SEARCH_W = 38;
+    public static final int AUTO_SKYSTONE_SEARCH_POS_1_Y = 566;
+    public static final int AUTO_SKYSTONE_SEARCH_POS_2_Y = 300;
+    public static final int AUTO_SKYSTONE_SEARCH_POS_3_Y = 38;
+    public static final int AUTO_SKYSTONE_SEARCH_H = 76;
 
     private HardwareMap hardwareMap = null;
 

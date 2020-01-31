@@ -37,18 +37,12 @@ public class RedPlatformFar extends AutoCommon {
         // put the flaps back down
         robot.setFlaps(true);
 
+
         // turn around and move the arm/claw to teleop position
         turnToHeading(90, 0.3);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_STRAIGHT_POS);
         moveArmDown(robot.ARM_AUTO_TO_TELEOP_ENC_TICKS);
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
-
-        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS);
-        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_STRAIGHT_POS);
-        moveArmDown(robot.ARM_AUTO_TO_TELEOP_ENC_TICKS);
-        robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
-
-        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS);
 
         // drive to the sky-bridge
         strafeOnHeading(15, 0.3, 90);
