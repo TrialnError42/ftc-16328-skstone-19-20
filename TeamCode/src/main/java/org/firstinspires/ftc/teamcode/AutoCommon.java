@@ -62,6 +62,7 @@ public class AutoCommon extends LinearOpMode {
     }
 
     private double initialHeading = 0;
+
     protected double getHeading() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - initialHeading;
     }
@@ -85,7 +86,7 @@ public class AutoCommon extends LinearOpMode {
 
         robot.resetDriveEncoders();
         robot.startMove(1, 0, 0, Math.abs(power) * dir);
-        while (opModeIsActive() && Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks);
+        while (opModeIsActive() && Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks) ;
         robot.stopMove();
     }
 
@@ -99,6 +100,25 @@ public class AutoCommon extends LinearOpMode {
         robot.startMove(1, 0, 0, Math.abs(power) * dir);
         while (opModeIsActive() && Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks) {
             double turnMod = getHeadingDiff(targetHeading) / 100;
+            robot.startMove(Math.abs(power) * dir, 0, Range.clip(turnMod, -0.2, 0.2), 1);
+        }
+        robot.stopMove();
+    }
+
+    protected void driveOnHeadingRamp(double driveDistance, double minPower, double maxPower, double rampDistance, double targetHeading) {
+        double dir = Math.signum(driveDistance);
+        if (dir == 0) return;
+
+        double encoderTicks = inchesToTicks(Math.abs(driveDistance));
+        double rampTicks = inchesToTicks(Math.abs(rampDistance));
+
+        robot.resetDriveEncoders();
+        robot.startMove(1, 0, 0, Math.abs(minPower) * dir);
+        while (opModeIsActive() && Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks) {
+            double turnMod = getHeadingDiff(targetHeading) / 100;
+            double startRampPower = minPower + (maxPower - minPower) * (Math.abs(robot.motorFL.getCurrentPosition()) / rampTicks);
+            double endRampPower = minPower + (maxPower - minPower) * (Math.abs(encoderTicks - robot.motorFL.getCurrentPosition()) / rampTicks);
+            double power = Range.clip(Math.min(startRampPower, endRampPower), minPower, maxPower);
             robot.startMove(Math.abs(power) * dir, 0, Range.clip(turnMod, -0.2, 0.2), 1);
         }
         robot.stopMove();
@@ -144,7 +164,23 @@ public class AutoCommon extends LinearOpMode {
     protected void moveArmDown(double ticksToMove) {
         robot.motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorArm.setPower(robot.ARM_AUTO_DOWN_SPEED);
+        while (opModeIsActive() && Math.abs(robot.motorArm.getCurrentPosition()) < Math.abs(ticksToMove)) {
+            if (Math.abs(robot.motorArm.getCurrentPosition()) < Math.abs(ticksToMove - robot.ARM_AUTO_DOWN_SLOW_TICKS)) {
+                robot.motorArm.setPower(robot.ARM_AUTO_DOWN_SPEED_FAST);
+            } else {
+                robot.motorArm.setPower(robot.ARM_AUTO_DOWN_SPEED_SLOW);
+            }
+            telemetry.addData("MotorPos", robot.motorArm.getCurrentPosition());
+            telemetry.addData("TickLeft", Math.abs(ticksToMove) - Math.abs(robot.motorArm.getCurrentPosition()));
+            telemetry.update();
+        }
+        robot.motorArm.setPower(0);
+    }
+
+    protected void moveArmUp(double ticksToMove) {
+        robot.motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorArm.setPower(robot.ARM_AUTO_UP_SPEED);
         while (opModeIsActive() && Math.abs(robot.motorArm.getCurrentPosition()) < Math.abs(ticksToMove)) {
             telemetry.addData("MotorPos", robot.motorArm.getCurrentPosition());
             telemetry.addData("TickLeft", Math.abs(ticksToMove) - Math.abs(robot.motorArm.getCurrentPosition()));
@@ -152,6 +188,7 @@ public class AutoCommon extends LinearOpMode {
         }
         robot.motorArm.setPower(0);
     }
+
 
     private static final String VUFORIA_KEY = "AWAydHD/////AAABmXGZ9mQxg09AvxhSoY5XwiUiKg1MPonVQDDS"
         + "nPNo+YPMZ8VgPFUW0TcIMXrdaUXiSIyJCwCD7AtpPBT3x0GMgxihOuroB4VTSN/eV8W8w9QmYnX2lo0VNuVFs0sQ"

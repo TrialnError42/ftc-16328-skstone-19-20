@@ -25,8 +25,8 @@ public class RobotHardware {
     public Servo servoClaw;
     public Servo servoClawPivot;
 
-    public static final double LEFT_FLAP_UP_POS     = 0.36;
-    public static final double LEFT_FLAP_DOWN_POS   = 0.62;
+    public static final double LEFT_FLAP_UP_POS     = 0.18;
+    public static final double LEFT_FLAP_DOWN_POS   = 0.41;
     public static final double RIGHT_FLAP_UP_POS    = 1.00;
     public static final double RIGHT_FLAP_DOWN_POS  = 0.77;
 
@@ -45,8 +45,14 @@ public class RobotHardware {
 
     public static final double ARM_POWER_SLOW  = 0.2;
     public static final double ARM_POWER_FAST  = 0.5;
-    public static final double ARM_AUTO_DOWN_SPEED = -0.5;
-    public static final double ARM_AUTO_TO_TELEOP_ENC_TICKS = 5300;
+
+    public static final double ARM_AUTO_DOWN_SPEED_SLOW = -0.3;
+    public static final double ARM_AUTO_DOWN_SPEED_FAST = -1.0;
+    public static final double ARM_AUTO_DOWN_SLOW_TICKS = 500;
+    public static final double ARM_AUTO_UP_SPEED = 0.5;
+    public static final double ARM_AUTO_TO_TELEOP_ENC_TICKS = 5350;
+    public static final double ARM_AUTO_TO_SKYSTONE_ENC_TICKS = 5500;
+    public static final double ARM_AUTO_UP_POS_ENC_TICKS= 1000;
 
     public static final double WHEEL_DIAMETER = 4.0;
     public static final double DRIVE_MOTOR_TICKS_PER_ROTATION = 537.6;

@@ -24,8 +24,8 @@ public class BluePlatformFar extends AutoCommon {
         robot.setFlaps(true);
         sleep(500);
         // arc backwards to reposition the platform
-        driveOnHeadingFlipped(-5, 0.3, 10);
         driveOnHeadingFlipped(-20, 0.3, 20);
+        driveOnHeadingFlipped(-5, 0.3, 10);
         turnToHeading(85, 0.3);
         //wall push the platform into the
         driveOnHeading(6, 0.3, 90);
