@@ -117,7 +117,7 @@ public class AutoCommon extends LinearOpMode {
         while (opModeIsActive() && Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks) {
             double turnMod = getHeadingDiff(targetHeading) / 100;
             double startRampPower = minPower + (maxPower - minPower) * (Math.abs(robot.motorFL.getCurrentPosition()) / rampTicks);
-            double endRampPower = minPower + (maxPower - minPower) * (Math.abs(encoderTicks - robot.motorFL.getCurrentPosition()) / rampTicks);
+            double endRampPower = minPower + (maxPower - minPower) * (Math.abs(encoderTicks - robot.motorFL.getCurrentPosition()) / (rampTicks*2));
             double power = Range.clip(Math.min(startRampPower, endRampPower), minPower, maxPower);
             robot.startMove(Math.abs(power) * dir, 0, Range.clip(turnMod, -0.2, 0.2), 1);
         }
@@ -155,8 +155,16 @@ public class AutoCommon extends LinearOpMode {
     }
 
     protected void turnToHeading(double targetHeading, double power) {
-        while (opModeIsActive() && Math.abs(getHeadingDiff(targetHeading)) > 5) {
+        while (opModeIsActive() && Math.abs(getHeadingDiff(targetHeading)) > 6) {
             robot.startMove(0, 0, 1, power * Math.signum(getHeadingDiff(targetHeading)));
+        }
+        robot.stopMove();
+    }
+
+    protected void turnToHeading(double targetHeading) {
+        while (opModeIsActive() && Math.abs(getHeadingDiff(targetHeading)) > 6) {
+            double turnMod = getHeadingDiff(targetHeading) / 100;
+            robot.startMove(0, 0, Range.clip(turnMod, -1.0, 1.0));
         }
         robot.stopMove();
     }
@@ -191,10 +199,10 @@ public class AutoCommon extends LinearOpMode {
 
 
     private static final String VUFORIA_KEY = "AWAydHD/////AAABmXGZ9mQxg09AvxhSoY5XwiUiKg1MPonVQDDS"
-        + "nPNo+YPMZ8VgPFUW0TcIMXrdaUXiSIyJCwCD7AtpPBT3x0GMgxihOuroB4VTSN/eV8W8w9QmYnX2lo0VNuVFs0sQ"
-        + "8Loq4jDIf2fPN0UdBHoQegRmV16sdDkYPE9tClFPxAL7oN8h82ETCyP40SZPORsbGZHRCMF5keXzhL6zoNBzD3MT"
-        + "XNCTgIyoPy83Oz0RvplOH9IYrYzXemfsCv667hDX3fFkcly4W2oNfMtwf2Z1vuX1S89Mkgu0R+KEVt25PAHtLTf+"
-        + "Ri2RMAEtUxW49I8Ic75dNWRno7LC1+NrXDJ5Iis693C/fUcNAC4S5uYRCmNTskz5";
+            + "nPNo+YPMZ8VgPFUW0TcIMXrdaUXiSIyJCwCD7AtpPBT3x0GMgxihOuroB4VTSN/eV8W8w9QmYnX2lo0VNuVFs0sQ"
+            + "8Loq4jDIf2fPN0UdBHoQegRmV16sdDkYPE9tClFPxAL7oN8h82ETCyP40SZPORsbGZHRCMF5keXzhL6zoNBzD3MT"
+            + "XNCTgIyoPy83Oz0RvplOH9IYrYzXemfsCv667hDX3fFkcly4W2oNfMtwf2Z1vuX1S89Mkgu0R+KEVt25PAHtLTf+"
+            + "Ri2RMAEtUxW49I8Ic75dNWRno7LC1+NrXDJ5Iis693C/fUcNAC4S5uYRCmNTskz5";
 
     private VuforiaLocalizerImplSubclass vuforia;
 
@@ -299,6 +307,93 @@ public class AutoCommon extends LinearOpMode {
 //        System.out.println("DEBUGGING -> File saved");
 
         return pos;
+    }
+
+
+//    strafeOnHeading(8, 0.3, 0);
+//        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
+//    moveArmDown();
+//        robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
+//        if (skystonePos == 1) {
+//        driveOnHeading(5, 0.3, 0);
+//    } else if (skystonePos == 2) {
+//        driveOnHeading(-1, 0.3, 0);
+//    } else {
+//        driveOnHeading(-9, 0.3, 0);
+//    }
+//    turnToHeading(-90, 0.3);
+
+    private enum SkystoneState { Strafe, Drive, Turn }
+    private static final double SKYSTONE_SETUP_DRIVE_POWER = 0.3;
+    private static final double SKYSTONE_SETUP_STRAFE_POWER = 0.3;
+    private final double SKYSTONE_SETUP_STRAFE_TICKS = inchesToTicks(8);
+
+    protected void setUpForSkystone(double driveDist) {
+        SkystoneState state = SkystoneState.Strafe;
+        boolean isArmDown = false;
+        boolean isDoneDriving = false;
+        double driveTicks = inchesToTicks(Math.abs(driveDist));
+        double drivePower = SKYSTONE_SETUP_DRIVE_POWER * Math.signum(driveDist);
+        double strafePower = SKYSTONE_SETUP_STRAFE_POWER;
+
+        robot.motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.resetDriveEncoders();
+        robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
+        robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
+
+        while (!isArmDown || !isDoneDriving) {
+            // arm moving down code
+            if (Math.abs(robot.motorArm.getCurrentPosition()) >= Math.abs(robot.ARM_AUTO_TO_SKYSTONE_ENC_TICKS)) {
+                isArmDown = true;
+            }
+            if (isArmDown) {
+                robot.motorArm.setPower(0);
+            } else {
+                if (Math.abs(robot.motorArm.getCurrentPosition()) < Math.abs(robot.ARM_AUTO_TO_SKYSTONE_ENC_TICKS - robot.ARM_AUTO_DOWN_SLOW_TICKS)) {
+                    robot.motorArm.setPower(robot.ARM_AUTO_DOWN_SPEED_FAST);
+                } else {
+                    robot.motorArm.setPower(robot.ARM_AUTO_DOWN_SPEED_SLOW);
+                }
+            }
+
+            // driving code
+//            robot.startMove(1, 0, 0, Math.abs(power) * dir);
+
+            if (isDoneDriving) {
+                robot.stopMove();
+            } else {
+                // check state transitions
+                if (state == SkystoneState.Strafe && Math.abs(robot.motorFL.getCurrentPosition()) >= SKYSTONE_SETUP_STRAFE_TICKS) {
+                    robot.stopMove();
+                    robot.resetDriveEncoders();
+                    state = SkystoneState.Drive;
+                } else if (state == SkystoneState.Drive && Math.abs(robot.motorFL.getCurrentPosition()) >= driveTicks) {
+                    state = SkystoneState.Turn;
+                } else if (state == SkystoneState.Turn && Math.abs(getHeadingDiff(-90)) < 3) {
+                    isDoneDriving = true;
+                    robot.stopMove();
+                }
+                // apply powers
+                double turnMod = getHeadingDiff(state == SkystoneState.Turn ? -90 : 0) / 100;
+                double drive = 0;
+                double strafe = 0;
+                if (state == SkystoneState.Turn) {
+                    turnMod = Range.clip(turnMod, -1.0, 1.0);
+                } else {
+                    turnMod = Range.clip(turnMod, -0.2, 0.2);
+                }
+                if (state == SkystoneState.Strafe) {
+                    strafe = strafePower;
+                }
+                if (state == SkystoneState.Drive) {
+                    drive = drivePower;
+                }
+                robot.startMove(drive, strafe, turnMod, 1);
+            }
+        }
+        robot.motorArm.setPower(0);
+        robot.stopMove();
     }
 
 }

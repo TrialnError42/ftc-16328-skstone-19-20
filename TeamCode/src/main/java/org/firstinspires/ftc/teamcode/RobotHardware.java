@@ -46,7 +46,7 @@ public class RobotHardware {
     public static final double ARM_POWER_SLOW  = 0.2;
     public static final double ARM_POWER_FAST  = 0.5;
 
-    public static final double ARM_AUTO_DOWN_SPEED_SLOW = -0.3;
+    public static final double ARM_AUTO_DOWN_SPEED_SLOW = -0.2;
     public static final double ARM_AUTO_DOWN_SPEED_FAST = -1.0;
     public static final double ARM_AUTO_DOWN_SLOW_TICKS = 500;
     public static final double ARM_AUTO_UP_SPEED = 0.5;
@@ -151,6 +151,10 @@ public class RobotHardware {
         motorFR.setPower(Range.clip(powerFR / max, -1, 1));
         motorBL.setPower(Range.clip(powerBL / max, -1, 1));
         motorBR.setPower(Range.clip(powerBR / max, -1, 1));
+    }
+
+    public void startMove(double drive, double strafe, double turn) {
+        startMove(drive, strafe, turn, 1);
     }
 
     public void stopMove() {
