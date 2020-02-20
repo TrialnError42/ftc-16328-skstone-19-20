@@ -20,6 +20,9 @@ public class RobotHardware {
 
     public DcMotor motorArm;
 
+   // public DcMotor armExtension;
+
+
     public Servo servoRClamp;
     public Servo servoLClamp;
     public Servo servoClaw;
@@ -52,7 +55,10 @@ public class RobotHardware {
     public static final double ARM_AUTO_UP_SPEED = 0.5;
     public static final double ARM_AUTO_TO_TELEOP_ENC_TICKS = 5350;
     public static final double ARM_AUTO_TO_SKYSTONE_ENC_TICKS = 5500;
-    public static final double ARM_AUTO_UP_POS_ENC_TICKS= 1000;
+    public static final double ARM_AUTO_UP_POS_ENC_TICKS = 1000;
+    public static final double ARMEXTENSION_AUTO_UP_SPEED = 2000;
+    public static final double ARMEXTENSION_AUTO_DOWN_SPEED = 2000;
+
 
     public static final double WHEEL_DIAMETER = 4.0;
     public static final double DRIVE_MOTOR_TICKS_PER_ROTATION = 537.6;
