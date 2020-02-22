@@ -20,8 +20,7 @@ public class RobotHardware {
 
     public DcMotor motorArm;
 
-   // public DcMotor armExtension;
-
+   public DcMotor motorTape;
 
     public Servo servoRClamp;
     public Servo servoLClamp;
@@ -58,6 +57,7 @@ public class RobotHardware {
     public static final double ARM_AUTO_UP_POS_ENC_TICKS = 1000;
     public static final double ARMEXTENSION_AUTO_UP_SPEED = 2000;
     public static final double ARMEXTENSION_AUTO_DOWN_SPEED = 2000;
+    public static final double DTAPE_EXTEND = 5000;
 
 
     public static final double WHEEL_DIAMETER = 4.0;
@@ -102,6 +102,8 @@ public class RobotHardware {
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorTape = hardwareMap.get(DcMotor.class, "motorTape");
 
         motorArm = hardwareMap.get(DcMotor.class, "motorArm");
         motorArm.setDirection(DcMotorSimple.Direction.REVERSE);

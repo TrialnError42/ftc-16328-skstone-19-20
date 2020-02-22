@@ -20,9 +20,10 @@ public class BlueBlockPark extends AutoCommon {
 
 
         driveOnHeading(-22, 0.3, -90);
-        strafeOnHeading(1, 0.3, -90);
+        strafeOnHeading(2, 0.3, -90);
+        tapeExtension(5000);
 
-    }
+}
 
 
 }

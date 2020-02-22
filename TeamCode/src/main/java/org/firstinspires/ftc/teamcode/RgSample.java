@@ -43,7 +43,25 @@ public class RgSample extends LinearOpMode {
             driveControl();
             flapControl();
             armControl();
+            tapeControl();
         }
+    }
+
+    private void tapeControl() {
+
+        boolean dTapeExtend = gamepad1.dpad_right;
+        boolean dTapeReverse = gamepad1.dpad_left;
+        double speed = 0.0;
+
+        if (dTapeExtend) {
+            speed = 1.0;
+        } else if (dTapeReverse) {
+            speed = -1.0;
+        }
+        robot.motorTape.setPower(speed);
+      //  sleep(300);
+        robot.motorTape.setPower(0.0);
+
     }
 
     private void driveControl() {
@@ -57,7 +75,6 @@ public class RgSample extends LinearOpMode {
         double drive = -gamepad1.left_stick_y; // ?? why is this getting negated
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
-
         robot.startMove(drive, strafe, turn, scale);
     }
 
@@ -99,6 +116,8 @@ public class RgSample extends LinearOpMode {
 
         telemetry.addData("Motor Pos", robot.motorArm.getCurrentPosition());
         telemetry.update();
+
+
 
     }
 }

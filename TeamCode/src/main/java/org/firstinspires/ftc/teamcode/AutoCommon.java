@@ -196,36 +196,22 @@ public class AutoCommon extends LinearOpMode {
         }
         robot.motorArm.setPower(0);
     }
-/*
-    //this is new for arm extension
-    protected void ArmExtensionUp(double ticks move) {
-        robot.armExtension.setmode(DcMoter.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.armExtension.setPower(robot.ARMEXTENSION_AUTO_UP_SPEED);
-        while  (opModeIsActive() && Math.abs(robot.ArmExtensionUp.getCurrentPosition()) < Math.abs(ticksToMove)) {
-            telemetry.addData("MotorPos", robot.armExtension.getCurrentPosition());
-            telemetry.addData("TickLeft", Math.abs(ticksToMove) - Math.abs(robot.armExtension.getCurrentPosition()));
+
+
+
+   //this is new for arm extension
+    protected void tapeExtension(double ticksTomove) {
+        robot.motorTape.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTape.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorTape.setPower(robot.DTAPE_EXTEND);
+        while  (opModeIsActive() && Math.abs(robot.motorTape.getCurrentPosition()) < Math.abs(ticksTomove)) {
+            telemetry.addData("MotorPos", robot.motorTape.getCurrentPosition());
+            telemetry.addData("TickLeft", Math.abs(ticksTomove) - Math.abs(robot.motorTape.getCurrentPosition()));
             telemetry.update();
         }
-        robot.ArmExtensionUp.setPower(0);
+        robot.motorTape.setPower(0);
 
     }
-
-    protected void ArmExtensionDown(double ticks move) {
-        robot.armExtension.setmode(DcMoter.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.armExtension.setPower(robot.ARMEXTENSION_AUTO_DOWN_SPEED);
-        while (opModeIsActive() && Math.abs(robot.armExtension.getCurrentPosition()) < Math.abs(ticksToMove)) {
-            telemetry.addData("MotorPos", robot.armExtension.getCurrentPosition());
-            telemetry.addData("TickLeft", Math.abs(ticksToMove) - Math.abs(robot.armExtension.getCurrentPosition()));
-            telemetry.update();
-        }
-        robot.ArmExtensionDown.setPower(0)
-
-        }
-*/
-
-
 
     private static final String VUFORIA_KEY = "AWAydHD/////AAABmXGZ9mQxg09AvxhSoY5XwiUiKg1MPonVQDDS"
             + "nPNo+YPMZ8VgPFUW0TcIMXrdaUXiSIyJCwCD7AtpPBT3x0GMgxihOuroB4VTSN/eV8W8w9QmYnX2lo0VNuVFs0sQ"
@@ -371,6 +357,7 @@ public class AutoCommon extends LinearOpMode {
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
         robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
 
+
         while (!isArmDown || !isDoneDriving) {
             // arm moving down code
             if (Math.abs(robot.motorArm.getCurrentPosition()) >= Math.abs(robot.ARM_AUTO_TO_SKYSTONE_ENC_TICKS)) {
@@ -423,6 +410,8 @@ public class AutoCommon extends LinearOpMode {
         }
         robot.motorArm.setPower(0);
         robot.stopMove();
+
+
     }
 
 }

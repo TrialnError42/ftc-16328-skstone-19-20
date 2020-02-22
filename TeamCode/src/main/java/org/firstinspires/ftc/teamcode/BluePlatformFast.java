@@ -29,7 +29,6 @@ public class BluePlatformFast extends AutoCommon {
         driveOnHeading(-33, 0.5, 90);
         sleep(1000);
 
-
     }
 
 
