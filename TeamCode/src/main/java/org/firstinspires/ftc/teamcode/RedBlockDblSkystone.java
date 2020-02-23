@@ -18,8 +18,8 @@ public class RedBlockDblSkystone extends AutoCommon {
 
         // drive away from wall
         if (skystonePos == 1) {
-            setUpForSkystone(3);
-        } else if (skystonePos == 2) {
+            setUpForSkystone(2);
+        } else if (skystonePos == 1) {
             setUpForSkystone(-1);
         } else {
             setUpForSkystone(-9);
@@ -92,15 +92,15 @@ public class RedBlockDblSkystone extends AutoCommon {
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
             turnToHeading(-90);
-            strafeOnHeading(-10, 0.5, -90);
+            strafeOnHeading(-13, 0.5, -90);
         } else if (skystonePos == 2) {
-            driveOnHeadingRamp(84, 0.3, 1.0, 15,0);
+            driveOnHeadingRamp(84, 0.3, 1.0, 15,3);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
             turnToHeading(-90);
-            strafeOnHeading(-10, 0.3, -90);
+            strafeOnHeading(-8, 0.3, -90);
         } else {
-            driveOnHeadingRamp(83, 0.3, 1.0, 15,0);
+            driveOnHeadingRamp(83, 0.3, 1.0, 15,3);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
             turnToHeading(-90);
@@ -116,22 +116,23 @@ public class RedBlockDblSkystone extends AutoCommon {
         sleep(400);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS + 0.2);
         driveOnHeading(-4, 0.5, -90);
+        //tapeExtension(600);
         turnToHeading(-180);
 
 
         if (skystonePos == 1) {
             driveOnHeadingRamp(100, 0.5, 1.0, 15,180);
         } else if (skystonePos == 2) {
-            driveOnHeadingRamp(95, 0.5, 1.0, 15,180);
+            driveOnHeadingRamp(98, 0.5, 1.0, 15,180);
         } else {
             driveOnHeadingRamp(90, 0.5, 1.0, 15,180);
         }
         //driveOnHeadingRamp(70, 0.3, 1.0, 15, -180);
        //turnToHeading(160,0.5);
-        //moveArmUp(175);
+        moveArmUp(175);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
-        sleep(100);
+        //sleep(100);
         driveOnHeadingRamp(-20, 0.5, 1.0,-15,190d);
 
 

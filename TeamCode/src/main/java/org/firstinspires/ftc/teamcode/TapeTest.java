@@ -13,7 +13,7 @@ public class TapeTest extends AutoCommon{
 
         driveOnHeading(50, 0.3, 0);
 
-        tapeExtension(5000);
+        tapeExtension(1000);
 
 }
 

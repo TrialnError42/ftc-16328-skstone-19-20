@@ -22,7 +22,7 @@ public class BlueBlockDblSkystone extends AutoCommon {
         } else if (skystonePos == 2) {
             setUpForSkystone(0);
         } else {
-            setUpForSkystone(-9);
+            setUpForSkystone(-8);
         }
 
         driveOnHeading(18, 0.3, -90);
@@ -46,14 +46,14 @@ public class BlueBlockDblSkystone extends AutoCommon {
             driveOnHeadingRamp(91, 0.3, 1.0, 15,-2);
         }
 
-        robot.setFlaps(false);
+       // robot.setFlaps(false);
         turnToHeading(-90);
         driveOnHeading(10, 0.4, -90);
         //lift arm by inch
         moveArmUp(150);
         driveOnHeading(4, 0.2, -90);
        // driveOnHeading(4, 0.2, -90);
-        robot.setFlaps(true);
+        //robot.setFlaps(true);
         sleep(500);
         //added program down
 
@@ -67,12 +67,12 @@ public class BlueBlockDblSkystone extends AutoCommon {
         driveOnHeading(5, 0.5, 0);
 
         // raise the flaps and wait for them to go up
-        robot.setFlaps(false);
+        //robot.setFlaps(false);
         sleep(600);
         // back up
         driveOnHeading(-10, 0.3, 0);
         // put the flaps back down
-        robot.setFlaps(true);
+       //robot.setFlaps(true);
 
 
         // turn around and move the arm/claw to teleop position
@@ -88,22 +88,24 @@ public class BlueBlockDblSkystone extends AutoCommon {
         //moveArmUp(175);
 
         if (skystonePos == 1) {
-            driveOnHeadingRamp(90, 0.3, 1.0, 15,180);
+            driveOnHeadingRamp(92, 0.3, 1.0, 15,177);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
+            //strafeOnHeading(2, 0.5, -90);
             turnToHeading(-90);
-           //strafeOnHeading(10, 0.5, -90);
+
         } else if (skystonePos == 2) {
             driveOnHeadingRamp(88, 0.3, 1.0, 15,178);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
             turnToHeading(-90);
-            strafeOnHeading(11, 0.3, -90);
+            strafeOnHeading(9, 0.3, -90);
         } else {
             driveOnHeadingRamp(88, 0.3, 1.0, 15,180);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
-            strafeOnHeading(16, 0.5, -90);
+            //TODO: This specific one is strafing and turning. Need to fix it.
+            strafeOnHeading(14, 0.3, -90);
             turnToHeading(-90);
         }
 
@@ -120,11 +122,11 @@ public class BlueBlockDblSkystone extends AutoCommon {
 
 
         if (skystonePos == 1) {
-            driveOnHeadingRamp(90, 0.5, 1.0, 15,0);
+            driveOnHeadingRamp(90, 0.5, 1.0, 15,-4);
         } else if (skystonePos == 2) {
             driveOnHeadingRamp(95, 0.5, 1.0, 15,-4);
         } else {
-            driveOnHeadingRamp(100, 0.5, 1.0, 15,0);
+            driveOnHeadingRamp(100, 0.5, 1.0, 15,-4);
         }
         //driveOnHeadingRamp(70, 0.3, 1.0, 15, -180);
        //turnToHeading(160,0.5);

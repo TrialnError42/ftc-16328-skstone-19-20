@@ -38,9 +38,9 @@ public class RobotHardware {
 
     public static final double CLAW_PIVOT_INIT_POS = 0.13;
     public static final double CLAW_PIVOT_SKYBRIDGE_POS = 0.70;
-    public static final double CLAW_PIVOT_SKYSTONE_APPROACH_POS = 0.69;
-    public static final double CLAW_PIVOT_SKYSTONE_GRAB_POS = 0.65;
-    public static final double CLAW_PIVOT_STRAIGHT_POS = 0.56;
+    public static final double CLAW_PIVOT_SKYSTONE_APPROACH_POS = 0.66; // was .69
+    public static final double CLAW_PIVOT_SKYSTONE_GRAB_POS = 0.62; // was .65
+    public static final double CLAW_PIVOT_STRAIGHT_POS = 0.52;
     public static final double CLAW_PIVOT_MOTOR_MOD = -6800;
     public static final double CLAW_PIVOT_MAX_POS = 1.0;
     public static final double CLAW_PIVOT_MIN_POS = 0.2;
@@ -53,7 +53,7 @@ public class RobotHardware {
     public static final double ARM_AUTO_DOWN_SLOW_TICKS = 500;
     public static final double ARM_AUTO_UP_SPEED = 0.5;
     public static final double ARM_AUTO_TO_TELEOP_ENC_TICKS = 5350;
-    public static final double ARM_AUTO_TO_SKYSTONE_ENC_TICKS = 5500;
+    public static final double ARM_AUTO_TO_SKYSTONE_ENC_TICKS = 5600;// it was 5500
     public static final double ARM_AUTO_UP_POS_ENC_TICKS = 1000;
     public static final double ARMEXTENSION_AUTO_UP_SPEED = 2000;
     public static final double ARMEXTENSION_AUTO_DOWN_SPEED = 2000;
