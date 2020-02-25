@@ -19,8 +19,8 @@ public class RedBlockDblSkystone extends AutoCommon {
         // drive away from wall
         if (skystonePos == 1) {
             setUpForSkystone(2);
-        } else if (skystonePos == 1) {
-            setUpForSkystone(-1);
+        } else if (skystonePos == 2) {
+            setUpForSkystone(0);
         } else {
             setUpForSkystone(-9);
         }
@@ -107,7 +107,7 @@ public class RedBlockDblSkystone extends AutoCommon {
         }
 
 
-        driveOnHeading(-2, 0.3, -90);
+       // driveOnHeading(-2, 0.3, -90);
         moveArmDown(75);
         driveOnHeading(8, 0.3, -90);
         driveOnHeading(1, 0.2, -90);
@@ -121,22 +121,25 @@ public class RedBlockDblSkystone extends AutoCommon {
 
 
         if (skystonePos == 1) {
-            driveOnHeadingRamp(100, 0.5, 1.0, 15,180);
+           // driveOnHeadingRamp(100, 0.5, 1.0, 15,180);
+            driveOnHeadingRampTape(100,0.5,1.0,15,180,5000);
         } else if (skystonePos == 2) {
-            driveOnHeadingRamp(98, 0.5, 1.0, 15,180);
-        } else {
-            driveOnHeadingRamp(90, 0.5, 1.0, 15,180);
+          //  driveOnHeadingRamp(98, 0.5, 1.0, 15,180);
+            driveOnHeadingRampTape(100,0.5,1.0,15,180,5000);
         }
-        //driveOnHeadingRamp(70, 0.3, 1.0, 15, -180);
-       //turnToHeading(160,0.5);
+        else {
+           // driveOnHeadingRamp(90, 0.5, 1.0, 15,180);
+        driveOnHeadingRampTape(95,0.5,1.0,15,180,5000);
+        }
+
         moveArmUp(175);
+
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
-        //sleep(100);
-        driveOnHeadingRamp(-20, 0.5, 1.0,-15,190d);
+        sleep(100);
+       // driveOnHeadingRamp(-20, 0.5, 1.0,-15,190);
 
 
-        sleep(1000);
 
     }
 }

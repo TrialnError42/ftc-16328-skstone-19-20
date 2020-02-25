@@ -124,6 +124,49 @@ public class AutoCommon extends LinearOpMode {
         robot.stopMove();
     }
 
+    protected void driveOnHeadingRampTape(double driveDistance, double minPower, double maxPower, double rampDistance, double targetHeading, double maxTapeTicks) {
+
+        double dir = Math.signum(driveDistance);
+        if (dir == 0) return;
+
+        boolean isTapeExtended = false;
+        boolean isDoneDriving = false;
+
+        double encoderTicks = inchesToTicks(Math.abs(driveDistance));
+        double rampTicks = inchesToTicks(Math.abs(rampDistance));
+
+        robot.resetDriveEncoders();
+        robot.startMove(1, 0, 0, Math.abs(minPower) * dir);
+
+        while (opModeIsActive() && ((Math.abs(robot.motorFL.getCurrentPosition()) < encoderTicks) || Math.abs(robot.motorTape.getCurrentPosition()) < maxTapeTicks)) {
+
+            double turnMod = getHeadingDiff(targetHeading) / 100;
+            double startRampPower = minPower + (maxPower - minPower) * (Math.abs(robot.motorFL.getCurrentPosition()) / rampTicks);
+            double endRampPower = minPower + (maxPower - minPower) * (Math.abs(encoderTicks - robot.motorFL.getCurrentPosition()) / (rampTicks*2));
+            double power = Range.clip(Math.min(startRampPower, endRampPower), minPower, maxPower);
+
+            if (!isDoneDriving) {
+                robot.startMove(Math.abs(power) * dir, 0, Range.clip(turnMod, -0.2, 0.2), 1);
+            }
+            else
+                robot.stopMove();
+
+            if (isTapeExtended) {
+                robot.motorTape.setPower(0.0);
+            }
+            else {
+                robot.motorTape.setPower(1.0);
+            }
+
+            if (Math.abs(robot.motorFL.getCurrentPosition()) >= encoderTicks)
+                isDoneDriving = true;
+
+            if (Math.abs(robot.motorTape.getCurrentPosition()) >= maxTapeTicks)
+                isTapeExtended = true;
+        }
+        robot.stopMove();
+    }
+
     protected void driveOnHeadingFlipped(double distance, double power, double targetHeading) {
         double dir = Math.signum(distance * power);
         if (dir == 0) return;
@@ -410,8 +453,5 @@ public class AutoCommon extends LinearOpMode {
         }
         robot.motorArm.setPower(0);
         robot.stopMove();
-
-
     }
-
 }

@@ -49,8 +49,8 @@ public class RgSample extends LinearOpMode {
 
     private void tapeControl() {
 
-        boolean dTapeExtend = gamepad1.dpad_right;
-        boolean dTapeReverse = gamepad1.dpad_left;
+        boolean dTapeExtend = gamepad2.dpad_right;
+        boolean dTapeReverse = gamepad2.dpad_left;
         double speed = 0.0;
 
         if (dTapeExtend) {
