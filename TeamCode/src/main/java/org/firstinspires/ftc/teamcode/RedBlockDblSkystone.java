@@ -25,8 +25,8 @@ public class RedBlockDblSkystone extends AutoCommon {
             setUpForSkystone(-9);
         }
 
-        driveOnHeading(18, 0.3, -90);
-        driveOnHeading(4, 0.1, -90);
+        driveOnHeading(4, 0.3, -90);
+        driveOnHeading(4, 0.15, -90);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
         sleep(500);
@@ -82,13 +82,16 @@ public class RedBlockDblSkystone extends AutoCommon {
 
         // drive to the sky-bridge
         strafeOnHeading(13,0.8,180);
+        //we stafe here because it lines up against the wall so we driveonheading 20 inches 100% of the time
+        //because in each of the postitio where it lines up on the tray isnt 100% this alows for a very persise alignment to 100% we go 20 inches forward
+        //they will convince you to get rid of this but consider why it's here
         turnToHeading(-90);
         driveOnHeading(20, 0.5, -90);
         turnToHeading(0);
         //moveArmUp(175);
 
         if (skystonePos == 1) {
-            driveOnHeadingRamp(86, 0.3, 1.0, 15,0);
+            driveOnHeadingRamp(86, 0.3, 1.0, 15,2);
             robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);
             robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_APPROACH_POS);
             turnToHeading(-90);
@@ -109,8 +112,8 @@ public class RedBlockDblSkystone extends AutoCommon {
 
        // driveOnHeading(-2, 0.3, -90);
         moveArmDown(75);
-        driveOnHeading(8, 0.3, -90);
-        driveOnHeading(1, 0.2, -90);
+        driveOnHeading(8, 0.3, skystonePos == 1 ? -80 : -90);
+        driveOnHeading(1, 0.2, skystonePos == 1 ? -80 : -90);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
         sleep(400);
@@ -122,7 +125,7 @@ public class RedBlockDblSkystone extends AutoCommon {
 
         if (skystonePos == 1) {
            // driveOnHeadingRamp(100, 0.5, 1.0, 15,180);
-            driveOnHeadingRampTape(100,0.5,1.0,15,180,5000);
+            driveOnHeadingRampTape(100,0.5,1.0,15,177,5000);
         } else if (skystonePos == 2) {
           //  driveOnHeadingRamp(98, 0.5, 1.0, 15,180);
             driveOnHeadingRampTape(100,0.5,1.0,15,180,5000);
@@ -132,7 +135,7 @@ public class RedBlockDblSkystone extends AutoCommon {
         driveOnHeadingRampTape(95,0.5,1.0,15,180,5000);
         }
 
-        moveArmUp(175);
+        //moveArmUp(175);
 
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_OPEN_POS);

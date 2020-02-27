@@ -381,10 +381,11 @@ public class AutoCommon extends LinearOpMode {
 //    }
 //    turnToHeading(-90, 0.3);
 
-    private enum SkystoneState { Strafe, Drive, Turn }
+    private enum SkystoneState { Strafe, Drive, Turn, Drive2 }
     private static final double SKYSTONE_SETUP_DRIVE_POWER = 0.3;
     private static final double SKYSTONE_SETUP_STRAFE_POWER = 0.3;
     private final double SKYSTONE_SETUP_STRAFE_TICKS = inchesToTicks(8);
+    private final double SKYSTONE_SETUP_DRIVE_2_TICKS = inchesToTicks(14);
 
     protected void setUpForSkystone(double driveDist) {
         SkystoneState state = SkystoneState.Strafe;
@@ -430,11 +431,15 @@ public class AutoCommon extends LinearOpMode {
                 } else if (state == SkystoneState.Drive && Math.abs(robot.motorFL.getCurrentPosition()) >= driveTicks) {
                     state = SkystoneState.Turn;
                 } else if (state == SkystoneState.Turn && Math.abs(getHeadingDiff(-90)) < 3) {
+                    robot.stopMove();
+                    robot.resetDriveEncoders();
+                    state = SkystoneState.Drive2;
+                } else if (state == SkystoneState.Drive2 && Math.abs(robot.motorFL.getCurrentPosition()) >= SKYSTONE_SETUP_DRIVE_2_TICKS) {
                     isDoneDriving = true;
                     robot.stopMove();
                 }
                 // apply powers
-                double turnMod = getHeadingDiff(state == SkystoneState.Turn ? -90 : 0) / 100;
+                double turnMod = getHeadingDiff(state == SkystoneState.Turn || state == SkystoneState.Drive2 ? -90 : 0) / 100;
                 double drive = 0;
                 double strafe = 0;
                 if (state == SkystoneState.Turn) {
@@ -447,6 +452,9 @@ public class AutoCommon extends LinearOpMode {
                 }
                 if (state == SkystoneState.Drive) {
                     drive = drivePower;
+                }
+                if (state == SkystoneState.Drive2) {
+                    drive = Math.abs(drivePower);
                 }
                 robot.startMove(drive, strafe, turnMod, 1);
             }

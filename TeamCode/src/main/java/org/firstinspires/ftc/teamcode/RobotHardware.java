@@ -104,6 +104,9 @@ public class RobotHardware {
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         motorTape = hardwareMap.get(DcMotor.class, "motorTape");
+        motorTape.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorTape.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorTape.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         motorArm = hardwareMap.get(DcMotor.class, "motorArm");
         motorArm.setDirection(DcMotorSimple.Direction.REVERSE);

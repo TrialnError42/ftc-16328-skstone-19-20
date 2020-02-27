@@ -25,7 +25,7 @@ public class BlueBlockDblSkystone extends AutoCommon {
             setUpForSkystone(-6);
         }
 
-        driveOnHeading(18, 0.3, -90);
+        driveOnHeading(4, 0.3, -90);
         driveOnHeading(4, 0.1, -90);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYSTONE_GRAB_POS);
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
@@ -82,6 +82,9 @@ public class BlueBlockDblSkystone extends AutoCommon {
 
         // drive to the sky-bridge
         strafeOnHeading(-13,0.8,0);
+        //we stafe here because it lines up against the wall so we driveonheading 20 inches 100% of the time
+        //because in each of the postitio where it lines up on the tray isnt 100% this alows for a very persise alignment to 100% we go 20 inches forward
+        //they will convince you to get rid of this but consider why it's here
         turnToHeading(-90);
         driveOnHeading(20, 0.5, -90);
         turnToHeading(180);
@@ -108,7 +111,7 @@ public class BlueBlockDblSkystone extends AutoCommon {
             //TODO: This specific one is strafing and turning. Need to fix it.
             turnToHeading(-90);
             strafeOnHeading(10, 0.4, -90);
-            turnToHeading(245);
+//            turnToHeading(245);
 
         }
         moveArmDown(75);
@@ -119,8 +122,8 @@ public class BlueBlockDblSkystone extends AutoCommon {
             driveOnHeading(8, 0.3, -90);
             driveOnHeading(1, 0.2, -90);
         } else {
-            driveOnHeading(8, 0.3, 250);
-            driveOnHeading(2, 0.2, 250);
+            driveOnHeading(8, 0.3, 260);
+            driveOnHeading(2, 0.2, 260);
         }
            // moveArmDown(75);
        // driveOnHeading(8, 0.3, -90);
