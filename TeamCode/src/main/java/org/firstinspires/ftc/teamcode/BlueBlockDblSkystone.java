@@ -20,7 +20,7 @@ public class BlueBlockDblSkystone extends AutoCommon {
         if (skystonePos == 1) {
             setUpForSkystone(3);
         } else if (skystonePos == 2) {
-            setUpForSkystone(0);
+            setUpForSkystone(0); 
         } else {
             setUpForSkystone(-6);
         }

@@ -54,9 +54,9 @@ public class RgSample extends LinearOpMode {
         double speed = 0.0;
 
         if (dTapeExtend) {
-            speed = 1.0;
+            speed = 0.9;
         } else if (dTapeReverse) {
-            speed = -1.0;
+            speed = -0.9;
         }
         robot.motorTape.setPower(speed);
       //  sleep(300);

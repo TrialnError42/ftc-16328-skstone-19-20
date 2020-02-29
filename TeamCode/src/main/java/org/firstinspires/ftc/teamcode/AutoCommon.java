@@ -451,9 +451,11 @@ public class AutoCommon extends LinearOpMode {
                     strafe = strafePower;
                 }
                 if (state == SkystoneState.Drive) {
-                    drive = drivePower;
+                    drive = (drivePower == 0) ? SKYSTONE_SETUP_DRIVE_POWER : drivePower ;
                 }
                 if (state == SkystoneState.Drive2) {
+                    drivePower = (drivePower == 0) ? SKYSTONE_SETUP_DRIVE_POWER : drivePower ;
+
                     drive = Math.abs(drivePower);
                 }
                 robot.startMove(drive, strafe, turnMod, 1);

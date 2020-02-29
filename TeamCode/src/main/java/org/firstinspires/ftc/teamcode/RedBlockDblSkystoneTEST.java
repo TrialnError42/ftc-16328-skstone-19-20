@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.CameraDevice;
+
+@Disabled
 
 @Autonomous
 public class RedBlockDblSkystoneTEST extends AutoCommon {

@@ -18,11 +18,8 @@ public class BlueBlockPark extends AutoCommon {
         robot.servoClaw.setPosition(robot.CLAW_CLOSE_POS);
         robot.servoClawPivot.setPosition(robot.CLAW_PIVOT_SKYBRIDGE_POS);
 
-
         driveOnHeading(-22, 0.3, -90);
         strafeOnHeading(2, 0.3, -90);
-        tapeExtension(5000);
-
 }
 
 
