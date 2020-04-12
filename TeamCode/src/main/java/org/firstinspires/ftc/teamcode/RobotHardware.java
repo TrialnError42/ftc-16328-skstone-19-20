@@ -155,10 +155,10 @@ public class RobotHardware {
         double powerBL = (drive - strafe + turn) * scale;
         double powerBR = (drive + strafe - turn) * scale;
 
-        double maxPower = Math.max(Math.max(Math.abs(powerFL), Math.abs(powerFR)), Math.max(Math.abs(powerBL), Math.abs(powerBR))); // ?? Why are we using MAX function here.
+        double maxPower = Math.max(Math.max(Math.abs(powerFL), Math.abs(powerFR)), Math.max(Math.abs(powerBL), Math.abs(powerBR))); //
         double max = (maxPower < 1) ? 1 : maxPower;
 
-        motorFL.setPower(Range.clip(powerFL / max, -1, 1));  // What does this clipping doing?
+        motorFL.setPower(Range.clip(powerFL / max, -1, 1));
         motorFR.setPower(Range.clip(powerFR / max, -1, 1));
         motorBL.setPower(Range.clip(powerBL / max, -1, 1));
         motorBR.setPower(Range.clip(powerBR / max, -1, 1));
@@ -197,5 +197,9 @@ public class RobotHardware {
 
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        motorTape.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorTape.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 }

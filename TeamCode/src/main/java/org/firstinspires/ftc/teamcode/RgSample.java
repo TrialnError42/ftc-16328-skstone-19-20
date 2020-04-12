@@ -53,6 +53,8 @@ public class RgSample extends LinearOpMode {
         boolean dTapeReverse = gamepad2.dpad_left;
         double speed = 0.0;
 
+        //robot.motorTape.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       //robot.motorTape.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (dTapeExtend) {
             speed = 0.9;
         } else if (dTapeReverse) {
