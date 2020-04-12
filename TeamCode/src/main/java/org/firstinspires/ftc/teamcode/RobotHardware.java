@@ -28,6 +28,7 @@ public class RobotHardware {
     public Servo servoClawPivot;
 
     public static final double LEFT_FLAP_UP_POS     = 0.18;
+    public static final double LEFT_FLAP_UP_POOS     = 0.18;
     public static final double LEFT_FLAP_DOWN_POS   = 0.41;
     public static final double RIGHT_FLAP_UP_POS    = 1.00;
     public static final double RIGHT_FLAP_DOWN_POS  = 0.77;
